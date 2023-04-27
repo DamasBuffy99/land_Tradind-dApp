@@ -8,7 +8,7 @@ import {
     LAND_MINTING_CONTRACT_ADDRESS,
     LAND_TRADING_ABI,
     LAND_TRADING_CONTRACT_ADDRESS
-} from "../constants";
+} from "../../constants";
 
 export default function Home(){
     const zero=BigNumber.from(0);
@@ -133,13 +133,15 @@ export default function Home(){
         }
     };
 
-    const mintLandNFT = async() =>{
+    const mintLandNFT = async(superficie) =>{
         try{
             const signer = await getProviderOrSigner(true);
             const landMintingContract = getLandMintingContractInstance(signer);
-            const tx = await landMintingContract.mint();
+            console.log("1");
+            const tx = await landMintingContract.mint(superficie);
             setLoading(true);
             await tx.wait();
+            console.log("2");
             setLoading(false);
             await checkNumberOfLands();
         }catch(err){
@@ -258,7 +260,7 @@ export default function Home(){
         try{
             const provider = await getProviderOrSigner(false);
             const landMintingContract = getLandMintingContractInstance(provider);
-            const _landNumber = await landMintingContract.totalSupply();
+            const _landNumber = await landMintingContract.totalNumber();
             setLandNumber(parseInt(_landNumber.toString())); 
         }catch(err){
             console.error(err);
@@ -308,7 +310,7 @@ export default function Home(){
             if(yourLands.length ===0) {
                 return(
                     <div>
-                        You don't have any land!!!
+                        You don't have any land to sell !!!
                     </div>
                 );
             }else{
@@ -320,7 +322,7 @@ export default function Home(){
                                 <p>Land superficie: {p.superficie}</p>
 
 
-                                <label>Sell your  landNFT sell</label>
+                                <label>Sell your landNFT sell</label>
                                 <input
                                     placeholder="0"
                                     type="number"
@@ -387,16 +389,16 @@ export default function Home(){
                 <link rel="icon" href="./favicon.ico"/>
             </Head>
             <div>
-                <div>
-                    <h1></h1>
-                    <div className={styles.description}></div>
+                <div className={styles.main}>
+                    <h1 className={styles.description}>Welcome to the land trading market place!</h1>
+                    <div className={styles.description}>This is a dApp which allow anyone to buy and sell his land.</div>
                     <div className={styles.description}>
                         Total Number of Lands : {landNumber}
                         <br/>
-                        You have Mint {landBalance} NFTs
+                        You have Mint : {landBalance} NFTs
                     </div>
                     <div className={styles.flex}>
-                        <button className={styles.button} onClick={()=>setSelectTab("BuyLand")}>
+                        <button className={styles.button} onClick={()=>setSelectTab("SellLand")}>
                             Sell Land
                         </button>
                         <button className={styles.button} onClick={()=>setSelectTab("BuyLand")}>
@@ -417,8 +419,8 @@ export default function Home(){
                     </div>
                 </div>
             </div>
-            <footer>
-                Made with &#10048; by GAHOU Isaac
+            <footer className={styles.footer}>
+                Made with &#10084; by GAHOU Isaac from Benin Republic.
             </footer>
         </div>
     );

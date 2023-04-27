@@ -15,6 +15,10 @@ contract landMinting is ERC721{
         _baseTokenURI = baseURI;
     }
 
+    function totalNumber() public view returns(uint){
+        return _tokenId;
+    }
+
     function _baseURI() internal view virtual override returns(string memory){
         return _baseTokenURI;
     }
